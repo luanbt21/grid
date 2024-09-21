@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ExcelPreview from "$lib/ExcelPreview.svelte";
+  import { uppercase } from "$lib";
   import { read, utils } from "xlsx";
 
   let titleRowN = 1; // Assuming first row contains titles
@@ -191,6 +193,8 @@
       />
     </div>
 
+    <ExcelPreview {files} />
+
     <div>
       <label
         for="title-row"
@@ -220,6 +224,7 @@
         placeholder="A-Z"
         pattern="[A-Z]"
         maxlength="1"
+        use:uppercase
         bind:value={primaryCol}
         class="mt-1 p-2 block w-full rounded-md border-gray-700 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
       />
