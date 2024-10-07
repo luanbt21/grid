@@ -8,7 +8,7 @@
   let keyCol: string | null = null;
   let valueCol: string | null = null;
 
-  let map: Map<string, string[]> = new Map();
+  let map: Map<string, Set<string>> = new Map();
 
   let files: FileList;
   let isLoading = false;
@@ -56,9 +56,9 @@
               }
               const entry = map.get(row[keyColNum]);
               if (entry) {
-                entry.push(row[valueColNum]);
+                entry.add(row[valueColNum]);
               } else {
-                map.set(row[keyColNum], [row[valueColNum]]);
+                map.set(row[keyColNum], new Set(row[valueColNum]));
               }
             });
 
@@ -72,9 +72,10 @@
 
               const entry = map.get(row[keyColNum]);
               if (entry) {
-                const corresponding = entry.filter(
-                  (value) => value !== row[valueColNum],
-                );
+                const corresponding = entry
+                  .values()
+                  .filter((value) => value !== row[valueColNum])
+                  .toArray();
                 // insert corresponding next to value column
                 row.splice(valueColNum + 1, 0, corresponding.join(" | "));
               }
