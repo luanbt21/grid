@@ -58,7 +58,7 @@
               if (entry) {
                 entry.add(row[valueColNum]);
               } else {
-                map.set(row[keyColNum], new Set(row[valueColNum]));
+                map.set(row[keyColNum], new Set([row[valueColNum]]));
               }
             });
 
