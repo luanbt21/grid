@@ -7,6 +7,7 @@
   let titleRowN = 1;
   let keyCol: string | null = null;
   let valueCol: string | null = null;
+  let separator = ", ";
 
   let map: Map<string, Set<string>> = new Map();
 
@@ -77,7 +78,7 @@
                   .filter((value) => value !== row[valueColNum])
                   .toArray();
                 // insert corresponding next to value column
-                row.splice(valueColNum + 1, 0, corresponding.join(" | "));
+                row.splice(valueColNum + 1, 0, corresponding.join(separator));
               }
               csvRows.push(row);
             });
@@ -173,6 +174,21 @@
         maxlength="1"
         use:uppercase
         bind:value={valueCol}
+        class="mt-1 p-2 block w-full rounded-md border-gray-700 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      />
+    </div>
+
+    <div>
+      <label
+        for="primary-column"
+        class="block text-sm font-medium text-gray-700 mb-2"
+      >
+        Separator
+      </label>
+      <input
+        id="primary-column"
+        type="text"
+        bind:value={separator}
         class="mt-1 p-2 block w-full rounded-md border-gray-700 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
       />
     </div>
