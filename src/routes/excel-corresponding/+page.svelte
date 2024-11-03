@@ -4,15 +4,15 @@
   import { uppercase, downloadExcel } from "$lib/utils";
   import { read, utils } from "xlsx";
 
-  let titleRowN = 1;
-  let keyCol: string | null = null;
-  let valueCol: string | null = null;
-  let separator = ", ";
+  let titleRowN = $state(1);
+  let keyCol: string | null = $state(null);
+  let valueCol: string | null = $state(null);
+  let separator = $state(", ");
 
-  let map: Map<string, Set<string>> = new Map();
+  let map: Map<string, Set<string>> = $state(new Map());
 
-  let files: FileList;
-  let isLoading = false;
+  let files: FileList | undefined = $state();
+  let isLoading = $state(false);
   let warning = "";
 
   function onFilesChanged() {
@@ -24,6 +24,10 @@
   }
 
   async function process() {
+    if (!files) {
+      return;
+    }
+
     isLoading = true;
     let csvRows: any[][] = [];
 
@@ -111,7 +115,7 @@
         accept=".xlsx, .xls"
         disabled={isLoading}
         bind:files
-        on:change={onFilesChanged}
+        onchange={onFilesChanged}
         class="block w-full text-sm text-gray-500
         file:mr-4 file:py-2 file:px-4
         file:rounded-full file:border-0
@@ -122,7 +126,9 @@
       />
     </div>
 
-    <ExcelPreview {files} />
+    {#if files?.length}
+      <ExcelPreview {files} />
+    {/if}
 
     <div>
       <label
