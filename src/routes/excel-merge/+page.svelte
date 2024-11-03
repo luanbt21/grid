@@ -4,22 +4,22 @@
   import { uppercase, downloadExcel } from "$lib/utils";
   import { read, utils } from "xlsx";
 
-  let titleRowN: number | null = null;
-  let primaryCol: string | null = null;
+  let titleRowN: number | null = $state(null);
+  let primaryCol: string | null = $state(null);
 
-  let firstFile = "";
-  let warning: string | null = null;
-  let titleRow: string[] = [];
+  let firstFile = $state("");
+  let warning: string | null = $state(null);
+  let titleRow: string[] = $state([]);
   let skipRows: {
     data: string[];
     info: { fileName: string; sheetName: string; row: number };
-  }[] = [];
+  }[] = $state([]);
 
-  let files: FileList;
-  let isLoading = false;
+  let files: FileList | undefined = $state();
+  let isLoading = $state(false);
 
   function onFilesChanged() {
-    if (files.length <= 1) {
+    if (files && files.length <= 1) {
       alert("You should select multiple Excel files");
       return;
     }
@@ -79,7 +79,6 @@
 
                   // check title row
                   let hasBefore = false;
-                  let ok = true;
                   for (let i = 0; i < row.length; i++) {
                     // Determine primary column index based on non-empty title cell
                     if (
@@ -95,7 +94,6 @@
 
                     if (typeof row[i] === "number") {
                       warning = "Your title column have number type";
-                      ok = false;
                       continue;
                     }
 
@@ -106,7 +104,6 @@
 
                     if (!row[i] && hasBefore) {
                       warning = "Your title column have empty cell";
-                      ok = false;
                       continue;
                     }
 
@@ -115,7 +112,6 @@
 
                   if (!hasBefore) {
                     warning = "Your title column is empty";
-                    ok = false;
                   }
 
                   if (!primaryCol) {
@@ -190,7 +186,7 @@
         multiple
         disabled={isLoading}
         bind:files
-        on:change={onFilesChanged}
+        onchange={onFilesChanged}
         class="block w-full text-sm text-gray-500
         file:mr-4 file:py-2 file:px-4
         file:rounded-full file:border-0
@@ -201,7 +197,9 @@
       />
     </div>
 
-    <ExcelPreview {files} />
+    {#if files?.length}
+      <ExcelPreview {files} />
+    {/if}
 
     <div>
       <label

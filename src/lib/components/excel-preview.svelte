@@ -1,16 +1,22 @@
 <script lang="ts">
   import { read, utils } from "xlsx";
 
-  export let files: FileList;
+  interface Props {
+    files: FileList;
+  }
 
-  let file: File | null;
-  let data: any[] = [];
+  let { files }: Props = $props();
 
-  let loading = false;
-  $: if (file) readExcel(file);
+  let file: File | undefined = $state();
+  let data: any[] = $state([]);
+
+  let loading = $state(false);
 
   const columns = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+  $effect(() => {
+    if (file) readExcel(file);
+  });
   async function readExcel(file: File) {
     loading = true;
     const arrayBuffer = await file.arrayBuffer();

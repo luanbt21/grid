@@ -1,5 +1,10 @@
-<script>
+<script lang="ts">
   import "../app.css";
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 </script>
 
 <!-- link to homepage -->
@@ -9,5 +14,5 @@
   <div class="text-center">
     <a href="/" class="text-4xl p-3">🧰</a>
   </div>
-  <slot></slot>
+  {@render children?.()}
 </div>
