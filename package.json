@@ -11,23 +11,32 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.3.1",
-		"@sveltejs/kit": "^2.7.4",
-		"@sveltejs/vite-plugin-svelte": "^4.0.0",
+		"@sveltejs/kit": "^2.15.2",
+		"@sveltejs/vite-plugin-svelte": "^5.0.3",
+		"@types/file-saver": "^2.0.7",
 		"autoprefixer": "^10.4.20",
-		"svelte": "^5.1.9",
-		"svelte-check": "^4.0.5",
-		"tailwindcss": "^3.4.14",
-		"typescript": "^5.6.3",
-		"vite": "^5.4.10"
+		"bits-ui": "1.0.0-next.77",
+		"clsx": "^2.1.1",
+		"lucide-svelte": "^0.471.0",
+		"svelte": "^5.17.3",
+		"svelte-check": "^4.1.3",
+		"tailwind-merge": "^2.6.0",
+		"tailwind-variants": "^0.3.0",
+		"tailwindcss": "^3.4.17",
+		"tailwindcss-animate": "^1.0.7",
+		"typescript": "^5.7.3",
+		"vite": "^6.0.7"
 	},
 	"type": "module",
 	"packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1",
 	"dependencies": {
-		"bits-ui": "^0.21.16",
-		"clsx": "^2.1.1",
-		"lucide-svelte": "^0.454.0",
-		"tailwind-merge": "^2.5.4",
-		"tailwind-variants": "^0.2.1",
-		"xlsx": "^0.18.5"
+		"@radix-ui/react-popover": "^1.1.4",
+		"@zip.js/zip.js": "^2.7.54",
+		"class-variance-authority": "^0.7.1",
+		"docx": "^9.1.1",
+		"docx-preview": "^0.3.3",
+		"file-saver": "^2.0.5",
+		"lucide-react": "^0.471.0",
+		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
 	}
 }

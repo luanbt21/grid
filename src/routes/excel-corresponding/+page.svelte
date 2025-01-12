@@ -32,69 +32,65 @@
     let csvRows: any[][] = [];
 
     for (let file of files) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        if (e.target?.result instanceof ArrayBuffer) {
-          const data = new Uint8Array(e.target.result);
-          const workbook = read(data, { type: "array" });
+      const data = await file.arrayBuffer();
+      const workbook = read(data, { type: "array" });
 
-          workbook.SheetNames.forEach((sheetName) => {
-            const worksheet = workbook.Sheets[sheetName];
-            const jsonData: string[][] = utils.sheet_to_json(worksheet, {
-              header: 1,
-            });
+      workbook.SheetNames.forEach((sheetName) => {
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData: string[][] = utils.sheet_to_json(worksheet, {
+          header: 1,
+          range: 0,
+          defval: "",
+        });
 
-            jsonData.forEach((row, idx) => {
-              if (idx < titleRowN - 1) {
-                return;
-              }
+        jsonData.forEach((row, idx) => {
+          if (idx < titleRowN - 1) {
+            return;
+          }
 
-              if (!keyCol || !valueCol) {
-                return;
-              }
+          if (!keyCol || !valueCol) {
+            return;
+          }
 
-              const keyColNum = keyCol.charCodeAt(0) - 65;
-              const valueColNum = valueCol.charCodeAt(0) - 65;
+          const keyColNum = keyCol.charCodeAt(0) - 65;
+          const valueColNum = valueCol.charCodeAt(0) - 65;
 
-              if (!row[keyColNum]) {
-                return;
-              }
-              const entry = map.get(row[keyColNum]);
-              if (entry) {
-                entry.add(row[valueColNum]);
-              } else {
-                map.set(row[keyColNum], new Set([row[valueColNum]]));
-              }
-            });
+          if (!row[keyColNum]) {
+            return;
+          }
+          const entry = map.get(row[keyColNum]);
+          if (entry) {
+            entry.add(row[valueColNum]);
+          } else {
+            map.set(row[keyColNum], new Set([row[valueColNum]]));
+          }
+        });
 
-            jsonData.forEach((row) => {
-              if (!keyCol || !valueCol) {
-                return;
-              }
+        jsonData.forEach((row) => {
+          if (!keyCol || !valueCol) {
+            return;
+          }
 
-              const keyColNum = keyCol.charCodeAt(0) - 65;
-              const valueColNum = valueCol.charCodeAt(0) - 65;
+          const keyColNum = keyCol.charCodeAt(0) - 65;
+          const valueColNum = valueCol.charCodeAt(0) - 65;
 
-              const entry = map.get(row[keyColNum]);
-              if (entry) {
-                const corresponding = entry
-                  .values()
-                  .filter((value) => value !== row[valueColNum])
-                  .toArray();
-                // insert corresponding next to value column
-                row.splice(valueColNum + 1, 0, corresponding.join(separator));
-              }
-              csvRows.push(row);
-            });
-          });
-        }
+          const entry = map.get(row[keyColNum]);
+          if (entry) {
+            const corresponding = entry
+              .values()
+              .filter((value) => value !== row[valueColNum])
+              .toArray();
+            // insert corresponding next to value column
+            row.splice(valueColNum + 1, 0, corresponding.join(separator));
+          }
+          csvRows.push(row);
+        });
+      });
 
-        downloadExcel(csvRows, "coressponding", file.name);
-        isLoading = false;
-      };
-
-      reader.readAsArrayBuffer(file);
+      downloadExcel(csvRows, "corresponding", file.name);
     }
+
+    isLoading = false;
   }
 </script>
 
@@ -201,7 +197,7 @@
 
     <Button
       disabled={!files?.length || !keyCol || !valueCol || isLoading}
-      on:click={process}
+      onclick={process}
     >
       Process
     </Button>

@@ -2,6 +2,7 @@
   const tools = [
     { name: "Excel megerator", path: "/excel-merge" },
     { name: "Excel Corresponding", path: "/excel-corresponding" },
+    { name: "Docx Template", path: "/template" },
   ];
 </script>
 
@@ -35,4 +36,3 @@
     </p>
   </div>
 </div>
-
