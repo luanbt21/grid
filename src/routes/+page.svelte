@@ -1,14 +1,17 @@
 <script>
-  const tools = [
-    { name: "Excel megerator", path: "/excel-merge" },
-    { name: "Excel Corresponding", path: "/excel-corresponding" },
-    { name: "Docx Template", path: "/template" },
-  ];
+const tools = [
+	{ name: "Excel megerator", path: "/excel-merge" },
+	{ name: "Excel Corresponding", path: "/excel-corresponding" },
+	{ name: "Docx Template", path: "/template" },
+];
 </script>
 
+<svelte:head>
+  <title>Excel Tools Online</title>
+</svelte:head>
 <div class="max-w-3xl mx-auto">
   <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-8">
-    Excel Tools
+    Excel Tools Online
   </h1>
 
   <div class="bg-white shadow overflow-hidden sm:rounded-lg">

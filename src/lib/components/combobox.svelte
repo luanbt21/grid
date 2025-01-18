@@ -1,34 +1,34 @@
 <script lang="ts">
-  import Check from "lucide-svelte/icons/check";
-  import ChevronsUpDown from "lucide-svelte/icons/chevrons-up-down";
-  import { tick } from "svelte";
-  import * as Command from "$lib/components/ui/command/index.js";
-  import * as Popover from "$lib/components/ui/popover/index.js";
-  import { Button } from "$lib/components/ui/button/index.js";
-  import { cn } from "$lib/utils.js";
+import { Button } from "$lib/components/ui/button/index.js";
+import * as Command from "$lib/components/ui/command/index.js";
+import * as Popover from "$lib/components/ui/popover/index.js";
+import { cn } from "$lib/utils.js";
+import Check from "lucide-svelte/icons/check";
+import ChevronsUpDown from "lucide-svelte/icons/chevrons-up-down";
+import { tick } from "svelte";
 
-  type Data = {
-    value: string;
-    label: string;
-  };
+type Data = {
+	value: string;
+	label: string;
+};
 
-  let {
-    data,
-    value = $bindable(""),
-    placeholder = "item",
-  }: { data: Data[]; value?: string; placeholder?: string } = $props();
+let {
+	data,
+	value = $bindable(""),
+	placeholder = "item",
+}: { data: Data[]; value?: string; placeholder?: string } = $props();
 
-  let open = $state(false);
-  let triggerRef = $state<HTMLButtonElement>(null!);
+let open = $state(false);
+let triggerRef = $state<HTMLButtonElement>();
 
-  const selectedValue = $derived(data.find((s) => s.value === value)?.label);
+const selectedValue = $derived(data.find((s) => s.value === value)?.label);
 
-  function closeAndFocusTrigger() {
-    open = false;
-    tick().then(() => {
-      triggerRef.focus();
-    });
-  }
+function closeAndFocusTrigger() {
+	open = false;
+	tick().then(() => {
+		triggerRef?.focus();
+	});
+}
 </script>
 
 <Popover.Root bind:open>

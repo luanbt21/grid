@@ -1,98 +1,101 @@
 <script lang="ts">
-  import { patchDetector } from "docx";
-  import Presentation from "lucide-svelte/icons/presentation";
-  import type { ChangeEventHandler } from "svelte/elements";
-  import { read, utils } from "xlsx";
-  import ExcelPreview from "$lib/components/excel-preview.svelte";
-  import Combobox from "$lib/components/combobox.svelte";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import { Toggle } from "$lib/components/ui/toggle";
-  import { renderDocx } from "$lib/utils";
-  import Button from "$lib/components/ui/button/button.svelte";
-  import { patchDocx } from "./process";
-  import { Checkbox } from "$lib/components/ui/checkbox";
+import Combobox from "$lib/components/combobox.svelte";
+import ExcelPreview from "$lib/components/excel-preview.svelte";
+import Button from "$lib/components/ui/button/button.svelte";
+import { Checkbox } from "$lib/components/ui/checkbox";
+import { Input } from "$lib/components/ui/input";
+import { Label } from "$lib/components/ui/label";
+import { Toggle } from "$lib/components/ui/toggle";
+import { renderDocx } from "$lib/utils";
+import { patchDetector } from "docx";
+import Presentation from "lucide-svelte/icons/presentation";
+import type { ChangeEventHandler } from "svelte/elements";
+import { read, utils } from "xlsx";
+import { patchDocx } from "./process";
 
-  let patches = $state<Record<string, string>>({});
+let patches = $state<Record<string, string>>({});
 
-  let docxFile: File | undefined = $state();
-  let excelFile: FileList | undefined = $state();
+let docxFile: File | undefined = $state();
+let excelFile: FileList | undefined = $state();
 
-  let firstRow: Record<string, string | number> = $state({});
-  let skipFirstRow = $state(false);
+let firstRow: Record<string, string | number> = $state({});
+let skipFirstRow = $state(false);
 
-  let previewExcel = $state(true);
-  let previewDocx = $state(false);
+let previewExcel = $state(true);
+let previewDocx = $state(false);
 
-  let rawData: Record<string, string | number>[] = $state([]);
+let rawData: Record<string, string | number>[] = $state([]);
 
-  const onTemplateChanged: ChangeEventHandler<HTMLInputElement> = async (
-    event
-  ) => {
-    if (!event.currentTarget.files?.length) return;
+const onTemplateChanged: ChangeEventHandler<HTMLInputElement> = async (
+	event,
+) => {
+	if (!event.currentTarget.files?.length) return;
 
-    docxFile = event.currentTarget.files[0];
-    const patchKeys = await patchDetector({
-      data: await docxFile.arrayBuffer(),
-    });
-    for (const patchKey of patchKeys) {
-      patches[patchKey] = "";
-    }
-  };
+	docxFile = event.currentTarget.files[0];
+	const patchKeys = await patchDetector({
+		data: await docxFile.arrayBuffer(),
+	});
+	for (const patchKey of patchKeys) {
+		patches[patchKey] = "";
+	}
+};
 
-  const onDataChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
-    if (!event.currentTarget.files?.length) {
-      for (const patchKey of Object.keys(patches)) {
-        patches[patchKey] = "";
-      }
-      return;
-    }
+const onDataChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+	if (!event.currentTarget.files?.length) {
+		for (const patchKey of Object.keys(patches)) {
+			patches[patchKey] = "";
+		}
+		return;
+	}
 
-    excelFile = event.currentTarget.files;
-    const buffer = await excelFile[0].arrayBuffer();
-    const workbook = read(buffer);
+	excelFile = event.currentTarget.files;
+	const buffer = await excelFile[0].arrayBuffer();
+	const workbook = read(buffer);
 
-    // TODO: handle some index error here
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    rawData = utils.sheet_to_json(worksheet, {
-      header: "A",
-      blankrows: false,
-      defval: "",
-    });
+	// TODO: handle some index error here
+	const sheetName = workbook.SheetNames[0];
+	const worksheet = workbook.Sheets[sheetName];
+	rawData = utils.sheet_to_json(worksheet, {
+		header: "A",
+		blankrows: false,
+		defval: "",
+	});
 
-    firstRow = rawData[0];
-    for (const [col, title] of Object.entries(firstRow)) {
-      for (const patchKey of Object.keys(patches)) {
-        if (title === patchKey) {
-          patches[patchKey] = col;
-          skipFirstRow = true;
-        }
-      }
-    }
-  };
+	firstRow = rawData[0];
+	for (const [col, title] of Object.entries(firstRow)) {
+		for (const patchKey of Object.keys(patches)) {
+			if (title === patchKey) {
+				patches[patchKey] = col;
+				skipFirstRow = true;
+			}
+		}
+	}
+};
 
-  const process = async () => {
-    if (!docxFile || !excelFile) {
-      return;
-    }
+const process = async () => {
+	if (!docxFile || !excelFile) {
+		return;
+	}
 
-    const data = rawData.slice(skipFirstRow ? 1 : 0).map((row) => {
-      return {
-        fileName: row.A.toString(),
-        patches: Object.entries(patches).map(([patchKey, col]) => {
-          return {
-            patchName: patchKey,
-            value: String(row[col]),
-          };
-        }),
-      };
-    });
+	const data = rawData.slice(skipFirstRow ? 1 : 0).map((row) => {
+		return {
+			fileName: row.A.toString(),
+			patches: Object.entries(patches).map(([patchKey, col]) => {
+				return {
+					patchName: patchKey,
+					value: String(row[col]),
+				};
+			}),
+		};
+	});
 
-    patchDocx(await docxFile.arrayBuffer(), data);
-  };
+	patchDocx(await docxFile.arrayBuffer(), data);
+};
 </script>
 
+<svelte:head>
+  <title>Fill Docx template with Excel</title>
+</svelte:head>
 <div class="flex flex-col gap-2 max-w-2xl mx-auto p-6">
   <h1 class="text-2xl font-bold mb-4">Fill Docx template with Excel</h1>
 
