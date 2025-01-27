@@ -173,7 +173,7 @@ async function process() {
         type="number"
         min="1"
         bind:value={titleRowN}
-        class="mt-1 p-2 block w-full rounded-md border-gray-700 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        class="mt-1 p-2 block w-full rounded-md border-gray-700 shadow-xs focus:border-indigo-300 focus:ring-3 focus:ring-indigo-200 focus:ring-opacity-50"
       />
     </div>
 
@@ -192,7 +192,7 @@ async function process() {
         maxlength="1"
         use:uppercase
         bind:value={primaryCol}
-        class="mt-1 p-2 block w-full rounded-md border-gray-700 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        class="mt-1 p-2 block w-full rounded-md border-gray-700 shadow-xs focus:border-indigo-300 focus:ring-3 focus:ring-indigo-200 focus:ring-opacity-50"
       />
     </div>
 
