@@ -79,9 +79,9 @@
       return;
     }
 
-    const data = rawData.slice(skipFirstRow ? 1 : 0).map((row) => {
+    const data = rawData.slice(skipFirstRow ? 1 : 0).map((row, i) => {
       return {
-        fileName: row.A.toString(),
+        fileName: row.A.toString() || `-${i + 1}`,
         patches: Object.entries(patches).map(([patchKey, col]) => {
           return {
             patchName: patchKey,
