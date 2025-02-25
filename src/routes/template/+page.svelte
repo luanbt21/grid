@@ -72,8 +72,6 @@
     }
   };
 
-  $inspect(111, rawData);
-
   const process = async () => {
     if (!docxFile || !excelFile) {
       return;
@@ -81,7 +79,7 @@
 
     const data = rawData.slice(skipFirstRow ? 1 : 0).map((row, i) => {
       return {
-        fileName: row.A.toString() || `-${i + 1}`,
+        fileName: `${row.A.toString()}-${i + 1}`,
         patches: Object.entries(patches).map(([patchKey, col]) => {
           return {
             patchName: patchKey,

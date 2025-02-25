@@ -1,31 +1,30 @@
 <script lang="ts">
-import { read, utils } from "xlsx";
+  import { read, utils } from "xlsx";
 
-let {
-	files,
-	file,
-	titleRowN,
-}: { files: FileList; file?: File; titleRowN?: number } = $props();
-let data: string[] = $state([]);
-let loading = $state(false);
+  let {
+    files,
+    file,
+    titleRowN,
+  }: { files: FileList; file?: File; titleRowN?: number } = $props();
+  let data: string[] = $state([]);
+  let loading = $state(false);
 
-const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-$effect(() => {
-	if (files.length) file = files[0];
-	if (file) readExcel(file);
-	console.log("rerender excel preview");
-});
+  $effect(() => {
+    if (files.length) file = files[0];
+    if (file) readExcel(file);
+  });
 
-async function readExcel(file: File) {
-	loading = true;
-	const arrayBuffer = await file.arrayBuffer();
-	const workbook = read(arrayBuffer);
-	const sheetName = workbook.SheetNames[0];
-	const worksheet = workbook.Sheets[sheetName];
-	data = utils.sheet_to_json(worksheet, { header: 1, range: 0, defval: "" });
-	loading = false;
-}
+  async function readExcel(file: File) {
+    loading = true;
+    const arrayBuffer = await file.arrayBuffer();
+    const workbook = read(arrayBuffer);
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    data = utils.sheet_to_json(worksheet, { header: 1, range: 0, defval: "" });
+    loading = false;
+  }
 </script>
 
 <div>
