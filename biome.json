@@ -29,7 +29,7 @@
 	},
 	"overrides": [
 		{
-			"include": ["*.svelte", "*.astro"],
+			"include": ["*.svelte", "*.svelte.*", "*.astro"],
 			"linter": {
 				"rules": {
 					"style": {
