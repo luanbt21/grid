@@ -22,13 +22,19 @@
     const workbook = read(arrayBuffer);
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-    data = utils.sheet_to_json(worksheet, { header: 1, range: 0, defval: "" });
+    data = utils
+      .sheet_to_json(worksheet, { header: 1, range: 0, defval: "" })
+      .slice(0, 30) as string[];
+
     loading = false;
   }
 </script>
 
 <div>
   <h2 class="text-xl font-bold mb-4">Preview</h2>
+  <description class="text-gray-600">
+    The preview only displays the first 30 rows.
+  </description>
 
   <select bind:value={file} class="p-2 border rounded w-full">
     {#if files?.length}

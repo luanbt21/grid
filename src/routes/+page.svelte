@@ -1,9 +1,12 @@
-<script>
-const tools = [
-	{ name: "Excel megerator", path: "/excel-merge" },
-	{ name: "Excel Corresponding", path: "/excel-corresponding" },
-	{ name: "Docx Template", path: "/template" },
-];
+<script lang="ts">
+  import type { ResolvedPathname } from "$app/types";
+
+  const tools: { name: string; path: ResolvedPathname }[] = [
+    { name: "Excel megerator", path: "/excel-merge" },
+    { name: "Excel Corresponding", path: "/excel-corresponding" },
+    { name: "Docx Template", path: "/template" },
+    { name: "Excel corresponding 2 rows", path: "/excel-corresponding-2-rows" },
+  ];
 </script>
 
 <svelte:head>
