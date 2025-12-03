@@ -49,14 +49,8 @@ export type DownloadExcelProps = BaseDownloadProps &
       }
   );
 
-export function downloadExcel({
-  type,
-  data,
-  filename,
-  tool,
-}: DownloadExcelProps) {
-  const worksheet =
-    type === "a" ? utils.aoa_to_sheet(data) : utils.json_to_sheet(data);
+export function downloadExcel({ type, data, filename, tool }: DownloadExcelProps) {
+  const worksheet = type === "a" ? utils.aoa_to_sheet(data) : utils.json_to_sheet(data);
   const workbook = utils.book_new();
   utils.book_append_sheet(workbook, worksheet, "Sheet1");
   writeFile(workbook, `${tool}-${filename}`);
