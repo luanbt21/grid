@@ -56,10 +56,9 @@
                     defval: "",
                 });
 
-                // setup data
                 for (const row of jsonData.slice(skipRow || 0)) {
                     if (!row[keyColNum]) {
-                        return;
+                        continue;
                     }
                     const entry = map.get(row[keyColNum]);
                     if (entry) {
